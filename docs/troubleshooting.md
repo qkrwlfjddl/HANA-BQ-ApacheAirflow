@@ -5,13 +5,10 @@
 확인 항목:
 
 - YAML이 `dags/hana_bq/configs/`에 있는지
-- YAML 확장자가 `.yaml`인지
 - YAML 파일명과 `id`가 동일한지
-- YAML 들여쓰기가 올바른지
 - `enabled: true`인지
 - Airflow에 Broken DAG 오류가 있는지
 
-Composer 반영에는 약 1~2분이 걸릴 수 있습니다.
 
 ## Cloud Run Job이 실행되지 않는 경우
 
