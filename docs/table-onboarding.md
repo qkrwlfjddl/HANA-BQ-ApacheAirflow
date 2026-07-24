@@ -1,4 +1,4 @@
-# HANA 테이블 추가 가이드라인
+# 신규 테이블 등록 가이드
 
 > Cloud Composer(Airflow)가 테이블별 YAML 설정을 읽고,
 > Cloud Run Job을 실행하여 SAP HANA 데이터를 BigQuery에 적재합니다.
