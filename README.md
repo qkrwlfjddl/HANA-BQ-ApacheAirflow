@@ -4,15 +4,15 @@
 ## 프로젝트 구조
 
 ```text
-Composer Cloud Storage
-└─ dags/
-   ├─ hana_bq_dag.py
-   └─ hana_bq/
-      ├─ tables.yaml
-      └─ queries/
-         ├─ ZTIF9001.sql
-         ├─ ZTIF9009.sql
-         └─ 새로운테이블.sql
+dags/
+├─ hana_bq_dag.py
+└─ hana_bq/
+   ├─ configs/
+   │  ├─ ZTIF9001.yaml
+   │  └─ ZTIF9009.yaml
+   └─ queries/
+      ├─ ZTIF9001.sql
+      └─ ZTIF9009.sql
 ```
 
 ### 주요 파일 설명
