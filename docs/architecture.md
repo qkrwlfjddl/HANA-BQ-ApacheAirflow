@@ -38,6 +38,8 @@ sequenceDiagram
 
 Airflow에는 데이터 처리 로직을 넣지 않고, 실제 데이터 처리는 Cloud Run Job에 위임했습니다.
 
+<br>
+
 ## 동적 DAG 생성
 
 `hana_bq_dag.py`는 다음 폴더의 YAML을 읽습니다.
@@ -66,6 +68,8 @@ hana_bq_테이블명_monthly
 
 월별 설정이 없는 테이블은 daily DAG만 생성됩니다.
 
+<br>
+
 ## BigQuery 적재 방식
 
 ```mermaid
@@ -80,6 +84,9 @@ flowchart LR
 HANA 조회와 Staging 적재가 성공한 후에만 Target 데이터를 변경합니다.
 
 실패한 Staging 테이블에는 만료 시간을 설정하여 원인 확인 후 자동 삭제되도록 구성했습니다.
+
+
+<br>
 
 ## 실행 제어
 
