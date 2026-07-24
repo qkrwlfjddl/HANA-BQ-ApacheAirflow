@@ -5,7 +5,9 @@
 
 [← 메인 README로 돌아가기](../README.md)
 
+---
 
+## 전체 파일 구조 
 ```text
 YAML 스케줄 → Airflow → Cloud Run → HANA SQL 실행 → BigQuery 적재
 ```
