@@ -4,19 +4,15 @@
 ## 프로젝트 구조
 
 ```text
-hana-bq-pipeline/
-├── main.py
-├── Dockerfile
-├── requirements.txt
-├── pipeline/
-│   ├── tables.yaml
-│   └── queries/
-│       ├── ztif9001.sql
-│       └── ztif9002.sql
-├── dags/
-│   └── hana_bq_dag.py
-├── tests/
-└── README.md
+Composer Cloud Storage
+└─ dags/
+   ├─ hana_bq_dag.py
+   └─ hana_bq/
+      ├─ tables.yaml
+      └─ queries/
+         ├─ ZTIF9001.sql
+         ├─ ZTIF9009.sql
+         └─ 새로운테이블.sql
 ```
 
 ### 주요 파일 설명
