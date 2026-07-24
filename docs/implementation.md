@@ -116,6 +116,8 @@ HANA 조회 또는 Staging 적재 단계에서 오류가 발생하면 기존 Tar
 
 실패한 Staging 테이블에는 만료 시간을 설정하여 디버깅 후 자동 삭제되도록 했습니다.
 
+--------------------------------
+<br>
 ## Airflow 오케스트레이션
 
 Cloud Composer와 Airflow에는 다음 실행 정책을 적용했습니다.
@@ -147,24 +149,6 @@ flowchart LR
 - 설정 파일: Composer Cloud Storage
 - 적재 대상: BigQuery
 - 실행 코드: Docker 기반 Cloud Run Job
-
-## 문제 해결 기록
-
-<details>
-<summary><strong>구축 중 해결한 주요 문제 보기</strong></summary>
-
-<br/>
-
-| 문제 | 해결 |
-|---|---|
-| 빈 BigQuery 테이블에서 스키마 불일치 | 최초 적재 시 Staging 스키마로 Target 생성 |
-| Composer에서 Broken DAG 발생 | Provider 버전에서 지원하지 않는 Operator 인자 제거 |
-| Cloud Run이 YAML을 찾지 못함 | 컨테이너 로컬 경로를 전체 GCS URI로 변경 |
-| 실행 버튼을 눌러도 작업 대기 | Airflow 재시도 상태와 Pool Slot 확인 |
-| 테이블마다 다른 시간 설정 불가 | 실행 설정별 독립 DAG 생성 |
-| 중앙 YAML 수정 충돌 | 테이블별 YAML 파일로 분리 |
-
-</details>
 
 ## 최종 사용자 경험
 
