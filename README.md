@@ -1,7 +1,7 @@
 <div align="center">
 
 # SAP HANA → BigQuery 
-# Cloud Composer 기반 배치 오케스트레이션
+# Cloud Composer(Apache Airflow) 기반 배치 오케스트레이션
 
 **YAML과 SQL만 추가하면 테이블별 Airflow DAG가 자동 생성되는 데이터 적재 파이프라인**
 
@@ -17,6 +17,18 @@
 </div>
 
 ---
+
+| ♻️ 공통 로더 | ⚙️ 동적 DAG |
+|:---:|:---:|
+| **하나의 Cloud Run Job**으로<br/>여러 HANA 테이블 처리 | 테이블별 YAML을 읽어<br/>**Airflow DAG 자동 생성** |
+
+| 🕒 독립 스케줄 | 📁 간편한 테이블 확장 |
+|:---:|:---:|
+| 테이블마다 서로 다른<br/>일별·월별 실행 시간 설정 | **YAML 1개 + SQL 1개**만<br/>업로드하여 신규 테이블 등록 |
+
+> **신규 테이블 추가 = YAML 1개 + SQL 1개**  
+> 코드 수정이나 컨테이너 재빌드 없이 새로운 적재 작업을 추가할 수 있습니다.
+
 
 ## 구현 결과
 
@@ -87,7 +99,7 @@ sequenceDiagram
 테이블마다 달라지는 내용을 코드가 아닌 YAML과 SQL로 분리했습니다.
 
 ```text
-① YAML 작성  →  ② SQL 작성  →  ③ Composer 버킷 업로드
+1. YAML 작성  →  2. SQL 작성  →  3. Composer 버킷 업로드
 ```
 
 ```text
