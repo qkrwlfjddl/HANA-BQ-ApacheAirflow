@@ -20,28 +20,9 @@
 <br/>
 
 > **테이블 추가 방식**  
-> `Python 코드 작성 + Docker 빌드 + Job 생성 + DAG 수정`  
+> Python 코드 작성 + Docker 빌드 + Job 생성 + DAG 수정
 > ⬇️  
-> **`YAML 1개 + SQL 1개 업로드`**
-
-
-
-
-## 핵심 변화
-
-```mermaid
-flowchart LR
-    A["테이블별 코드 작성<br/>Job 생성<br/>DAG 수정<br/>이미지 재빌드"]
-    
-    A --> B["공통 로더"]
-    A --> C["동적 DAG"]
-    A --> D["테이블별 설정"]
-
-    B --> E["하나의 Cloud Run Job"]
-    C --> F["YAML 기반 자동 생성"]
-    D --> G["YAML + SQL 업로드"]
-
-
+> YAML 1개 + SQL 1개 업로드
 
 ## 구축 과정
 
