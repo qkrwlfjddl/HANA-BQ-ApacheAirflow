@@ -2,10 +2,14 @@
 # Cloud Composer(Apache Airflow) 기반 SAP HANA → BigQuery 배치 오케스트레이션
 
 SAP HANA 데이터를 BigQuery에 정기 적재하기 위해 구축한
+
+
 **Cloud Composer(Apache Airflow) 기반 설정 중심 배치 오케스트레이션 프로젝트**입니다.
 
 기존에는 테이블이 추가될 때마다 새로운 배치 코드와 Cloud Run Job을 만들어야 했습니다.  
 이를 공통 로더와 동적 DAG 구조로 개선하여,
+
+
 사용자가 **YAML 설정과 SQL 파일만 추가하면 새로운 적재 작업이 자동 생성**되도록 구성했습니다.
 
 
@@ -14,8 +18,6 @@ SAP HANA 데이터를 BigQuery에 정기 적재하기 위해 구축한
 - 하나의 Cloud Run Job으로 여러 HANA 테이블을 처리하는 공통 로더 구현
 - 테이블별 YAML 설정을 읽어 Airflow DAG를 자동 생성
 - 테이블마다 서로 다른 일별·월별 스케줄과 조회 기간 설정
-- 실패 재시도, 동시 실행 제한 및 실행 상태 관리
-- BigQuery Staging 테이블을 이용한 안전한 날짜 구간 교체
 - 신규 테이블 등록 과정을 YAML과 SQL 업로드로 표준화
 
 구축 과정과 기술적 의사결정은 [구축 과정 문서](docs/implementation.md)에서 확인할 수 있습니다.
@@ -107,7 +109,7 @@ HANA 조회 또는 Staging 적재 중 오류가 발생하면 Target 테이블을
 
 오류 확인 방법은 [운영 및 장애 대응 문서](docs/troubleshooting.md)에서 확인할 수 있습니다.
 
--*------------------------------
+-------------------------------
 
 ## 기술 스택
 
@@ -129,7 +131,6 @@ HANA 조회 또는 Staging 적재 중 오류가 발생하면 Target 테이블을
 </p>
 
 
--------------------------------------
 ## 프로젝트 문서
 
 - [상세 아키텍처](docs/architecture.md)
