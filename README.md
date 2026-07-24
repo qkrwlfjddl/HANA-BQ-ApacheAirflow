@@ -1,4 +1,24 @@
 
+<div align="center">
+
+# SAP HANA → BigQuery  
+## Cloud Composer 기반 배치 오케스트레이션
+
+**YAML과 SQL만 추가하면 테이블별 Airflow DAG가 자동 생성되는 데이터 적재 파이프라인**
+
+<p>
+  <img src="https://img.shields.io/badge/Apache%20Airflow-017CEE?style=flat-square&logo=apacheairflow&logoColor=white">
+  <img src="https://img.shields.io/badge/Cloud%20Composer-4285F4?style=flat-square&logo=googlecloud&logoColor=white">
+  <img src="https://img.shields.io/badge/Cloud%20Run-4285F4?style=flat-square&logo=googlecloud&logoColor=white">
+  <img src="https://img.shields.io/badge/BigQuery-669DF6?style=flat-square&logo=googlebigquery&logoColor=white">
+  <img src="https://img.shields.io/badge/SAP%20HANA-0FAAFF?style=flat-square&logo=sap&logoColor=white">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white">
+</p>
+
+</div>
+
+
+
 # Cloud Composer(Apache Airflow) 기반 SAP HANA → BigQuery 배치 오케스트레이션
 
 SAP HANA 데이터를 BigQuery에 정기 적재하기 위해 구축한
