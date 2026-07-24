@@ -4,6 +4,8 @@
 ## 프로젝트 구조
 
 ```text
+클라우드 런?? 
+
 dags/
 ├─ hana_bq_dag.py
 └─ hana_bq/
@@ -34,9 +36,3 @@ dags/
 
 * `dags/hana_bq_dag.py`
   HANA → BigQuery 적재 작업을 자동으로 실행하는 Airflow DAG 파일
-
-* `tests/`
-  파이프라인 테스트 코드를 관리하는 디렉터리
-
-* `README.md`
-  프로젝트 구성, 실행 방법, 배포 방법 등을 설명하는 문서
