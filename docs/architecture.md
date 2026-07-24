@@ -25,6 +25,8 @@ sequenceDiagram
     R-->>A: 성공 또는 실패 반환
 ```
 
+<br>
+
 ## 구성요소별 역할
 
 | 구성요소 | 역할 |
@@ -37,6 +39,7 @@ sequenceDiagram
 | Secret Manager / VPC | 접속 정보 보호 및 HANA 네트워크 연결 |
 
 Airflow에는 데이터 처리 로직을 넣지 않고, 실제 데이터 처리는 Cloud Run Job에 위임했습니다.
+
 
 <br>
 
@@ -67,6 +70,7 @@ hana_bq_테이블명_monthly
 ```
 
 월별 설정이 없는 테이블은 daily DAG만 생성됩니다.
+
 
 <br>
 
