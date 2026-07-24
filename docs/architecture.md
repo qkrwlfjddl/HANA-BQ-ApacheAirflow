@@ -1,56 +1,43 @@
-# 아키텍처
+# 시스템 아키텍처
 
-## 설계 목적
+> Cloud Composer가 테이블별 스케줄과 실행 상태를 관리하고,  
+> Cloud Run 공통 로더가 SAP HANA 조회와 BigQuery 적재를 수행합니다.
 
-이 프로젝트의 목적은 SAP HANA 테이블이 추가될 때마다 별도의 배치 프로그램과 Cloud Run Job을 생성해야 하는 문제를 해결하는 것입니다.
+[← 메인 README로 돌아가기](../README.md)
 
-하나의 공통 로더와 하나의 DAG Factory를 사용하고, 테이블별 차이는 YAML과 SQL로 분리했습니다.
+## 전체 실행 흐름
 
-```text
-공통 영역
-├─ Python 적재 로직
-├─ Docker 이미지
-├─ Cloud Run Job
-└─ Airflow DAG Factory
+```mermaid
+sequenceDiagram
+    participant A as Cloud Composer / Airflow
+    participant R as Cloud Run Job
+    participant H as SAP HANA
+    participant B as BigQuery
 
-테이블별 영역
-├─ YAML 설정
-└─ SQL
+    A->>R: TABLE_ID, RUN_NAME, RUN_DATE, CONFIG_URI
+    R->>R: YAML 및 SQL 읽기
+    R->>H: 날짜 조건을 포함한 SQL 실행
+    H-->>R: 조회 결과
+    R->>B: Staging 테이블 적재
+    R->>B: 적재 건수 검증
+    R->>B: 대상 날짜 구간 교체
+    R->>B: Staging 테이블 삭제
+    R-->>A: 성공 또는 실패 반환
 ```
 
 ## 구성요소별 역할
 
 | 구성요소 | 역할 |
 |---|---|
-| Cloud Composer | Airflow 환경 운영 |
-| Airflow DAG | 스케줄, 재시도 및 실행 상태 관리 |
-| Cloud Run Job | HANA 조회 및 BigQuery 적재 |
-| Cloud Storage | DAG, YAML, SQL 저장 |
-| Secret Manager | HANA 접속 정보 관리 |
-| VPC | Cloud Run과 HANA 네트워크 연결 |
-| BigQuery | 최종 데이터 및 Staging 테이블 저장 |
+| Cloud Composer / Airflow | 스케줄, 재시도, 동시 실행 및 작업 상태 관리 |
+| Cloud Run Job | HANA 조회, 데이터 검증 및 BigQuery 적재 |
+| Cloud Storage | DAG, 테이블별 YAML과 SQL 저장 |
+| SAP HANA | 원천 데이터 제공 |
+| BigQuery | Staging 및 최종 Target 데이터 저장 |
+| Secret Manager / VPC | 접속 정보 보호 및 HANA 네트워크 연결 |
 
-## 실행 흐름
+Airflow에는 데이터 처리 로직을 넣지 않고, 실제 데이터 처리는 Cloud Run Job에 위임했습니다.
 
-```mermaid
-sequenceDiagram
-    participant S as Airflow Scheduler
-    participant D as Dynamic DAG
-    participant R as Cloud Run Job
-    participant H as SAP HANA
-    participant B as BigQuery
-
-    S->>D: YAML의 cron에 따라 실행
-    D->>R: TABLE_ID, RUN_NAME, RUN_DATE, CONFIG_URI 전달
-    R->>R: YAML과 SQL 다운로드
-    R->>H: 날짜 조건을 포함한 SQL 실행
-    H-->>R: 조회 결과 반환
-    R->>B: Staging 테이블 생성 및 적재
-    R->>B: 대상 날짜 구간 DELETE
-    R->>B: Staging 데이터 INSERT
-    R->>B: Staging 테이블 삭제
-    R-->>D: 성공 또는 실패 반환
-```
 
 ## Airflow와 Cloud Run의 역할 분리
 
@@ -104,51 +91,20 @@ hana_bq_테이블명_monthly
 
 월별 설정이 없는 테이블은 daily DAG만 생성됩니다.
 
-## 날짜 구간 계산
+## BigQuery 적재 방식
 
-### `rolling_days`
-
-```yaml
-window:
-  type: rolling_days
-  days: 4
+```mermaid
+flowchart LR
+    A["SAP HANA"] --> B["Staging 적재"]
+    B --> C["건수 검증"]
+    C --> D["기존 날짜 구간 삭제"]
+    D --> E["신규 데이터 삽입"]
+    E --> F["Staging 삭제"]
 ```
 
-실행 기준일이 `2026-07-24`라면 다음 범위를 조회합니다.
+HANA 조회와 Staging 적재가 성공한 후에만 Target 데이터를 변경합니다.
 
-```text
-20260721 <= 날짜 컬럼 < 20260725
-```
-
-실행일을 포함한 최근 4일을 다시 조회합니다.
-
-### `previous_month`
-
-실행 기준일이 `2026-08-10`이면 다음 범위를 조회합니다.
-
-```text
-20260701 <= 날짜 컬럼 < 20260801
-```
-
-## BigQuery 구간 교체
-
-PK가 없는 테이블에서도 변경 데이터를 반영할 수 있도록 날짜 구간을 기준으로 데이터를 교체합니다.
-
-```sql
-BEGIN TRANSACTION;
-
-DELETE FROM target
-WHERE date_column >= start_date
-  AND date_column < end_date;
-
-INSERT INTO target
-SELECT *
-FROM staging;
-
-COMMIT TRANSACTION;
-```
-
-HANA 조회 및 Staging 적재가 성공한 뒤에만 Target 변경을 수행합니다.
+실패한 Staging 테이블에는 만료 시간을 설정하여 원인 확인 후 자동 삭제되도록 구성했습니다.
 
 ## 실행 제어
 
@@ -160,6 +116,8 @@ retry_delay = 10분
 max_active_runs = 1
 pool = "hana_extract_pool"
 ```
-
-이를 통해 동일 테이블의 중복 실행과 HANA에 대한 과도한 동시 접속을 제한합니다.
- 흠 그리고 이거는 이렇게 쓰면 됨? 내용 이게 맞아? 만약에 여기에 들어가야하는 거였으면 implome에서 빼서 여기에 추가해도 됨.. 그리고 이것도 마찬가지로 지금 너무 징그러움 근데 얘는 구조 니까 꾸밀 필요는 ㄴ없을 듯 그냥 간단하게 길이만 줄이면 될 것 같기도해 너의 생각음?
+retries=2 - 일시적인 오류 자동 재시도 
+retry_delay=10분 - 재시도 전 복구 시간 확보 
+max_active_runs=1 - 동일 DAG 중복 실행 방지
+hana_extract_pool - HANA 동시 접속 제한 
+Deferrable Operator - Cloud Run 대기 중 Worker 점유 최소화 
