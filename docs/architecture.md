@@ -38,31 +38,6 @@ sequenceDiagram
 
 Airflow에는 데이터 처리 로직을 넣지 않고, 실제 데이터 처리는 Cloud Run Job에 위임했습니다.
 
-
-## Airflow와 Cloud Run의 역할 분리
-
-Airflow는 데이터 이동 프로그램이 아니라 오케스트레이션 도구로 사용했습니다.
-
-Airflow의 역할:
-
-- cron 스케줄 관리
-- 테이블별 DAG 생성
-- Cloud Run Job 실행
-- 재시도 및 실패 상태 관리
-- 동시 실행 제한
-- 실행 이력 제공
-
-Cloud Run의 역할:
-
-- HANA 연결
-- SQL 실행
-- 데이터 Chunk 조회
-- BigQuery 적재
-- 건수 검증
-- 날짜 구간 교체
-
-이렇게 역할을 분리하여 Airflow DAG에 데이터 처리 로직이 집중되지 않도록 구성했습니다.
-
 ## 동적 DAG 생성
 
 `hana_bq_dag.py`는 다음 폴더의 YAML을 읽습니다.
