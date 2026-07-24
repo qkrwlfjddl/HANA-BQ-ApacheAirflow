@@ -1,17 +1,14 @@
-# 🌟SAP HANA → BigQuery 자동 적재 파이프라인
+# HANA 테이블 추가 가이드라인
 
+> Cloud Composer(Airflow)가 테이블별 YAML 설정을 읽고, 
+> Cloud Run Job을 실행하여 SAP HANA 데이터를 BigQuery에 적재합니다.
 
-Cloud Composer(Airflow)가 테이블별 YAML 설정을 읽고, 
-
-
-Cloud Run Job을 실행하여 SAP HANA 데이터를 BigQuery에 적재합니다.
+[← 메인 README로 돌아가기](../README.md)
 
 
 ```text
 YAML 스케줄 → Airflow → Cloud Run → HANA SQL 실행 → BigQuery 적재
 ```
-
-## 프로젝트 구조
 ```text
 dags/
 ├─ hana_bq_dag.py
