@@ -1,0 +1,33 @@
+version: 1
+
+defaults:
+  schema_mode: raw_string
+  chunk_size: 50000
+
+tables:
+  - id: ZTIF9001
+    enabled: true
+    query_file: ../queries/TABLE_A.sql
+
+    bq_project: ga4-bigquery
+    bq_dataset: HANABQ
+    bq_table: TABLE_A
+
+    window_column: INTEG_RDATE
+    window_format: yyyymmdd
+
+    runs:
+      - name: daily
+        schedule: "0 2 * * *"
+        load_strategy: window_replace
+        allow_empty: true
+        window:
+          type: rolling_days
+          days: 2
+
+      - name: monthly
+        schedule: "0 5 10 * *"
+        load_strategy: window_replace
+        allow_empty: true
+        window:
+          type: previous_month
