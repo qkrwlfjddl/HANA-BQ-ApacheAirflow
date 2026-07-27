@@ -11,7 +11,7 @@ from airflow.providers.google.cloud.operators.cloud_run import (
 )
 
 
-PROJECT_ID = "ga4-bigquery-431807"
+PROJECT_ID = "ga4-bigquery..."
 REGION = "asia-northeast3"
 CLOUD_RUN_JOB = "hana-bq-pipeline-loader"
 
@@ -22,7 +22,7 @@ CONFIG_DIR_PATH = (
 )
 
 CONFIG_GCS_DIR = (
-    "gs://asia-northeast3-hana-bq-com-2c023c7f-bucket"
+    "gs://asia-northeast3-hana-bq-com-...-bucket"
     "/dags/hana_bq/configs"
 )
 
