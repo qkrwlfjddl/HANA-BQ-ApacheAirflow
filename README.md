@@ -37,6 +37,22 @@
 ----------------------------
 ## 한눈에 보기
 
+### 파일 구조
+## 프로젝트 구조
+
+```text
+hana-bq/
+├── dags/
+│   ├── hana_bq_dag.py
+│   └── hana_bq/
+│       ├── configs/
+│       └── queries/
+├── loader/
+│   ├── main.py
+│   ├── Dockerfile
+│   └── requirements.txt
+└── README.md
+
 ### 아키텍처
 
 ```mermaid
@@ -112,17 +128,3 @@ Cloud Run 공통 로더는 다음 순서로 데이터를 처리합니다.
 | [구축 과정](docs/implementation.md) | 구현 순서와 기술적 의사결정 |
 | [테이블 등록 가이드](docs/table-onboarding.md) | YAML·SQL 작성 및 업로드 방법 |
 | [오류 대응](docs/troubleshooting.md) | 주요 오류의 원인과 해결 방법 |
-
-
-hana-bq/
-├── dags/
-│   ├── hana_bq_dag.py
-│   └── hana_bq/
-│       ├── configs/
-│       └── queries/
-├── loader/                  
-│   ├── main.py
-│   ├── Dockerfile
-│   └── requirements.txt
-├── docs/
-└── README.md
