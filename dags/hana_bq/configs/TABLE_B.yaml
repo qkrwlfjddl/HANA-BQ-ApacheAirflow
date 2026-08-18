@@ -5,33 +5,28 @@ defaults:
   chunk_size: 50000
 
 tables:
-  - id: ZTIF9001
+  - id: BOOK_SAP_2
     enabled: true
-    query_file: ../queries/ZTIF9001.sql
+    query_file: ../queries/BOOK_SAP_2.sql
 
-    bq_project: ga4-bigquery
-    bq_dataset: HANABQ
-    bq_table: ZTIF9001
+    bq_project: ga4-bigquery-431807
+    bq_dataset: lab_asia
+    bq_table: BOOK_SAP_2
 
-    window_column: INTEG_RDATE
+    window_column: WADAT_IST
     window_format: yyyymmdd
 
     runs:
+      # 최근 62일 범위를 매일 다시 적재
       - name: daily
-        schedule: "0 5 * * *"
+        schedule: "0 1 * * *"
         load_strategy: window_replace
         allow_empty: true
         window:
           type: rolling_days
-          days: 2
+          days: 62
 
-      - name: monthly
-        schedule: "30 5 8 * *"
-        load_strategy: window_replace
-        allow_empty: true
-        window:
-          type: previous_month
-
+      # 전체 기간을 한 번에 다시 적재하는 수동 실행용 DAG
       - name: backfill_once
         schedule: null
         load_strategy: replace
