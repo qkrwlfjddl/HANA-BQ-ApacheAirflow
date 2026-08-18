@@ -89,31 +89,6 @@ sequenceDiagram
 
 ----------------------------
 
-##  테이블 추가 방법
-
-테이블마다 달라지는 내용을 코드가 아닌 YAML과 SQL로 분리했습니다.
-
-```text
-1. YAML 작성  →  2. SQL 작성  →  3. Composer 버킷 업로드
-```
-
-```text
-dags/
-├─ hana_bq_dag.py
-└─ hana_bq/
-   ├─ configs/
-   │  ├─ TABLE_A.yaml
-   │  └─ TABLE_B.yaml
-   └─ queries/
-      ├─ TABLE_A.sql
-      └─ TABLE_B.sql
-```
-> 공통 로더, Docker 이미지, Cloud Run Job과 DAG 코드는 수정하지 않습니다.
-
-자세한 가이드라인은 [신규 테이블 등록 가이드](docs/table-onboarding.md)를 참고하세요.
-
-----------------------------
-
 ## 데이터 적재 안정성
 
 Cloud Run 공통 로더는 다음 순서로 데이터를 처리합니다.
@@ -137,3 +112,17 @@ Cloud Run 공통 로더는 다음 순서로 데이터를 처리합니다.
 | [구축 과정](docs/implementation.md) | 구현 순서와 기술적 의사결정 |
 | [테이블 등록 가이드](docs/table-onboarding.md) | YAML·SQL 작성 및 업로드 방법 |
 | [오류 대응](docs/troubleshooting.md) | 주요 오류의 원인과 해결 방법 |
+
+
+hana-bq/
+├── dags/
+│   ├── hana_bq_dag.py
+│   └── hana_bq/
+│       ├── configs/
+│       └── queries/
+├── loader/                  
+│   ├── main.py
+│   ├── Dockerfile
+│   └── requirements.txt
+├── docs/
+└── README.md
