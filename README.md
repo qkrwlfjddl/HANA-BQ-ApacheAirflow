@@ -38,7 +38,6 @@
 ## 한눈에 보기
 
 ### 파일 구조
-## 프로젝트 구조
 
 ```text
 hana-bq/
@@ -52,6 +51,7 @@ hana-bq/
 │   ├── Dockerfile
 │   └── requirements.txt
 └── README.md
+```
 
 ### 아키텍처
 
