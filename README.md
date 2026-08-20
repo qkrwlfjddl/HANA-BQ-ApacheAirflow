@@ -18,6 +18,7 @@
 
 > 본 파이프라인은 [Business Data & AI Dashboard](https://github.com/qkrwlfjddl/Business-Data-AI-Dashboard)에서 사용하는 데이터를 통합·적재하는 역할을 합니다.
 
+<sub>OOO 교육기업 데이터를 기반으로 구현한 프로젝트입니다. 공개 문서에서는 기업명, 프로젝트 ID, 사업부 코드와 사용자 식별 정보를 비식별화했습니다.</sub>
 </div>
 
 ---
