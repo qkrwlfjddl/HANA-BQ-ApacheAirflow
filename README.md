@@ -3,8 +3,7 @@
 # SAP HANA → BigQuery 
 # Cloud Composer(Apache Airflow) 기반 배치 오케스트레이션
 
-> 🔗 This pipeline serves as the data integration layer for
-> [Business Data & AI Dashboard](https://github.com/qkrwlfjddl/Business-Data-AI-Dashboard).
+
 
 **YAML과 SQL만 추가하면 테이블별 Airflow DAG가 자동 생성되는 데이터 적재 파이프라인**
 
@@ -16,6 +15,8 @@
   <img src="https://img.shields.io/badge/SAP%20HANA-0FAAFF?style=flat-square&logo=sap&logoColor=white">
   <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white">
 </p>
+
+> 본 파이프라인은 [Business Data & AI Dashboard](https://github.com/qkrwlfjddl/Business-Data-AI-Dashboard)에서 사용하는 데이터를 통합·적재하는 역할을 합니다.
 
 </div>
 
