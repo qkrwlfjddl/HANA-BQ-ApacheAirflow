@@ -135,9 +135,11 @@ Cloud Run 공통 로더는 다음 순서로 데이터를 처리합니다.
 
 ## 👤 My Contribution
 
-- SAP HANA → BigQuery 데이터 적재 구조 설계
-- Cloud Composer / Airflow 기반 테이블별 Dynamic DAG 구성
-- YAML 기반 테이블 설정 및 SQL 분리 구조 설계
-- Cloud Run 공통 Loader 구현
-- Staging → 검증 → DELETE / INSERT 방식의 적재 안정성 구성
-- 신규 테이블 추가 시 DAG 코드 수정 없이 확장 가능한 구조 구현
+| 영역 | 담당 |
+|---|---|
+| 🔄 **Pipeline** | SAP HANA → BigQuery 적재 구조 설계 |
+| ⚙️ **Orchestration** | Cloud Composer / Airflow Dynamic DAG 구성 |
+| 🧩 **Configuration** | YAML + SQL 기반 테이블별 설정 분리 |
+| ☁️ **Loader** | Cloud Run 공통 Loader 구현 |
+| 🛡️ **Data Reliability** | Staging → 검증 → DELETE / INSERT 적재 흐름 구성 |
+| 📈 **Scalability** | DAG 코드 수정 없이 신규 테이블 확장 가능한 구조 설계 |
