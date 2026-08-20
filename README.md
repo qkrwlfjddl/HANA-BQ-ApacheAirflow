@@ -18,7 +18,7 @@
 
 > 본 파이프라인은 [Business Data & AI Dashboard](https://github.com/qkrwlfjddl/Business-Data-AI-Dashboard)에서 사용하는 데이터를 통합·적재하는 역할을 합니다.
 
-<sub>  실제 업무 데이터와 소스 코드는 보안상 공개하지 않습니다.
+<sub> 🔐 실제 업무 데이터와 소스 코드는 보안상 공개하지 않습니다.
 공개 가능한 범위에서 시스템 구조, 데이터 흐름, 분석 로직 및 구현 내용을 정리했습니다.</sub>
 </div>
 
