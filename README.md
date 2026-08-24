@@ -24,7 +24,7 @@
 
 ---
 ## 구현 결과
-[Airflow](docs/airflow.png)
+docs/airflow.png
 
 | ♻️ 공통 로더 | ⚙️ 동적 DAG |
 |:---:|:---:|
