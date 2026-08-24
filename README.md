@@ -24,7 +24,8 @@
 
 ---
 ## 구현 결과
-docs/airflow.png
+
+![Learning Pattern](docs/airflow.png)
 
 | ♻️ 공통 로더 | ⚙️ 동적 DAG |
 |:---:|:---:|
