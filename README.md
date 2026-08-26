@@ -136,10 +136,13 @@ Cloud Run 공통 로더는 다음 순서로 데이터를 처리합니다.
 전체 시스템 구성과 데이터 흐름을 확인할 수 있습니다.
 
 [구축 과정 →](docs/implementation.md)
+
 데이터 수집부터 구현 순서와 기술적 의사결정을 확인할 수 있습니다.
 
 [테이블 등록 가이드 →](docs/table-onboarding.md) 
+
 YAML·SQL 작성 및 업로드 방법
 
 [Troubleshooting →](docs/troubleshooting.md)  
+
 주요 문제와 원인, 해결 과정 및 설계 변경 사항을 정리했습니다.
