@@ -241,4 +241,100 @@ STATUS=FAILED, staging retained for debugging
 
 ---
 
+# 트러블슈팅: account_bsark_mapping 중복 bsark 키로 인한 JOIN fan-out
+
+## 요약
+
+`loader/create_mapping.sql` 로 적재하는 `HANABQ.account_bsark_mapping` 테이블에서
+동일한 `bsark` 값이 서로 다른 `account` 이름으로 중복 등록되어 있다.
+이 매핑 테이블을 `bsark` 기준으로 JOIN 하면 행이 곱해져(fan-out)
+집계 결과(매출/건수 등)가 실제보다 부풀려지는 문제가 발생한다.
+
+## 증상
+
+- BigQuery에서 원천 테이블 ⨝ `account_bsark_mapping` (ON `bsark`) 후
+  건수/합계가 원천 대비 커진다.
+- 특정 `bsark` (예: `3310`, `3340`, `3080`, `7030`) 관련 계정에서만
+  숫자가 어긋난다.
+- `account` 라벨이 한 행에 대해 두 가지로 나뉘어 나타난다.
+
+## 원인
+
+`create_mapping.sql` 의 `INSERT ... VALUES` 에 같은 `bsark` 가
+2개 이상의 `account` 로 들어가 있다.
+
+| bsark | account 값                       |
+| ----- | -------------------------------- |
+| 3310  | 자격증 / 해커스자격증            |
+| 3340  | 한국사 / 해커스한국사           |
+| 3080  | 해커스공기업 / 해커스잡         |
+| 7030  | 해커스편입 / 해커스편입인강     |
+
+테이블에 `bsark` 유니크 제약이 없고(BigQuery는 PK/UNIQUE를 강제하지 않음),
+매핑을 `LEFT JOIN ... ON t.bsark = m.bsark` 로 사용하면
+`bsark = '3310'` 인 원천 1행이 매핑 2행과 매칭되어 2행으로 늘어난다.
+그 상태에서 `SUM()` / `COUNT()` 를 하면 값이 2배가 된다.
+
+## 재현
+
+```sql
+-- 원천 1행이 매핑 중복으로 2행이 되는지 확인
+SELECT bsark, COUNT(*) AS mapping_rows
+FROM `ga4-bigquery-431807.HANABQ.account_bsark_mapping`
+GROUP BY bsark
+HAVING COUNT(*) > 1
+ORDER BY bsark;
+```
+
+위 쿼리가 행을 반환하면 중복 키가 존재하는 것이다.
+
+## 해결
+
+### 1. 비즈니스 규칙 확정
+
+`bsark` 하나에 `account` 는 하나여야 하는지 먼저 확정한다.
+- 하나여야 함 → 대표 account 1개만 남긴다.
+- 여러 개가 정상 → 매핑을 1:N 으로 보고, 집계 쿼리에서 fan-out 을 막는다.
+
+### 2-A. bsark 를 1:1 로 정리 (권장)
+
+`create_mapping.sql` 에서 중복 bsark 의 account 를 한 개로 통일한다.
+정리 후 적재 직전에 검증 쿼리를 넣어 중복이 다시 들어오면 실패하도록 한다.
+
+```sql
+-- 적재 후 무결성 체크: 중복이 있으면 결과가 나오고, 리뷰에서 잡을 수 있음
+SELECT bsark, COUNT(*) c
+FROM `ga4-bigquery-431807.HANABQ.account_bsark_mapping`
+GROUP BY bsark
+HAVING c > 1;
+```
+
+### 2-B. 매핑을 유지해야 한다면 JOIN 에서 중복 제거
+
+집계 전에 `bsark` 당 대표 account 1건만 선택한다.
+
+```sql
+WITH mapping_dedup AS (
+  SELECT bsark, ANY_VALUE(account) AS account
+  FROM `ga4-bigquery-431807.HANABQ.account_bsark_mapping`
+  GROUP BY bsark
+)
+SELECT ...
+FROM source_table AS t
+LEFT JOIN mapping_dedup AS m
+  ON t.bsark = m.bsark
+```
+
+## 예방
+
+- 매핑 적재 파이프라인에 "bsark 유니크" 검증 쿼리를 추가하고,
+  중복 발견 시 파이프라인을 실패시킨다.
+- 매핑을 JOIN 하는 집계 쿼리는 항상 `bsark` 카디널리티를 가정하고
+  1:N 가능성을 코드 리뷰에서 확인한다.
+
+## 참고
+
+- 매핑 정의 파일: `loader/create_mapping.sql`
+- 대상 테이블: `ga4-bigquery-431807.HANABQ.account_bsark_mapping`
+
 [시스템 아키텍처 보기 →](architecture.md)
