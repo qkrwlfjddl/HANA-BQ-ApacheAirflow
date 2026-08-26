@@ -129,12 +129,17 @@ Cloud Run 공통 로더는 다음 순서로 데이터를 처리합니다.
 관련문서 [운영 및 장애 대응 문서](docs/troubleshooting.md)에서 확인할 수 있습니다.
 
 -------------------------------
-## 프로젝트 문서
 
-- **[아키텍처](docs/architecture.md)** — 서비스 구성과 전체 실행 흐름
-  
-- **[구축 과정](docs/implementation.md)** — 구현 순서와 기술적 의사결정
-  
-- **[테이블 등록 가이드](docs/table-onboarding.md)** — YAML·SQL 작성 및 업로드 방법
-  
-- **[오류 대응](docs/troubleshooting.md)** — 주요 오류의 원인과 해결 방법
+## 📚 Documentation
+
+[전체 아키텍처 →](docs/architecture.md)  
+전체 시스템 구성과 데이터 흐름을 확인할 수 있습니다.
+
+[구축 과정 →](docs/implementation.md)
+데이터 수집부터 구현 순서와 기술적 의사결정을 확인할 수 있습니다.
+
+[테이블 등록 가이드 →](docs/table-onboarding.md) 
+YAML·SQL 작성 및 업로드 방법
+
+[Troubleshooting →](docs/troubleshooting.md)  
+주요 문제와 원인, 해결 과정 및 설계 변경 사항을 정리했습니다.
